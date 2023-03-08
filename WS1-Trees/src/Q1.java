@@ -91,6 +91,12 @@ public class Q1 {
         }
     }
 
+    // ---------------Q8--------------------
+    //Return true iff position p is the parent of q, otherwise false.
+    public static <T> boolean isEdge(ITree<T> t, IPosition<T> p, IPosition<T> q) {
+        return t.parent(q) == p;
+    }
+
     // ---------------Shared--------------------
     public static <T> IPosition<T> find(ITree<T> t, IPosition<T> p, T k) {
         if (p.element().equals(k)) {
@@ -151,5 +157,11 @@ public class Q1 {
          */
         ArrayList<Character> allLeaves = getAllLeaves(tree);
         System.out.printf("Q7: %s\n", allLeaves);
+
+        /*
+        Q8: Is (N,L) an edge? Same as: Is N is the parent of L?
+         */
+        IPosition<Character> nPos = find(tree, tree.root(), 'N');
+        System.out.printf("Q8: %s\n", isEdge(tree, nPos, lPos));
     }
 }
