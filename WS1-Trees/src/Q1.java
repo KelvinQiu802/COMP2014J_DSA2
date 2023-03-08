@@ -74,6 +74,23 @@ public class Q1 {
         }
     }
 
+    // ---------------Q7--------------------
+    public static <T> ArrayList<T> getAllLeaves(ITree<T> t) {
+        ArrayList<T> result = new ArrayList<>();
+        addAllLeavesToLst(t, t.root(), result);
+        return result;
+    }
+
+    private static <T> void addAllLeavesToLst(ITree<T> t, IPosition<T> p, ArrayList<T> lst) {
+        if (t.isExternal(p)) {
+            lst.add(p.element());
+        }
+        IIterator<IPosition<T>> it = t.children(p);
+        while (it.hasNext()) {
+            addAllLeavesToLst(t, it.next(), lst);
+        }
+    }
+
     // ---------------Shared--------------------
     public static <T> IPosition<T> find(ITree<T> t, IPosition<T> p, T k) {
         if (p.element().equals(k)) {
@@ -128,5 +145,11 @@ public class Q1 {
         IPosition<Character> bPos = find(tree, tree.root(), 'B');
         ArrayList<Character> bDescendants = getDescendantsOfPosition(tree, bPos);
         System.out.printf("Q6: %s\n", bDescendants);
+
+        /*
+        Q7: List the elements that are stored at leaf (external) positions.
+         */
+        ArrayList<Character> allLeaves = getAllLeaves(tree);
+        System.out.printf("Q7: %s\n", allLeaves);
     }
 }
