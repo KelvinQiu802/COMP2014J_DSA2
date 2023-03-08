@@ -113,6 +113,31 @@ public class Q1 {
         addPathToLst(t, start, t.parent(end), lst);
     }
 
+    // ---------------Q10--------------------
+    public static <T> String getTreeDiagram(ITree<T> t) {
+        StringBuilder diagram = new StringBuilder();
+        buildTreeString(t, t.root(), "", "", diagram);
+        return diagram.toString();
+    }
+
+    // This solution is inspired by:
+    // https://stackoverflow.com/a/8948691
+    public static <T> void buildTreeString(ITree<T> t, IPosition<T> p, String prefix, String childrenPrefix, StringBuilder diagram) {
+        diagram.append(prefix);
+        diagram.append(p.element());
+        diagram.append("\n");
+        IIterator<IPosition<T>> it = t.children(p);
+        while (it.hasNext()) {
+            IPosition<T> nextPos = it.next();
+            if (it.hasNext()) {
+                buildTreeString(t, nextPos, childrenPrefix + "├── ", childrenPrefix + "│   ", diagram);
+            } else {
+                buildTreeString(t, nextPos, childrenPrefix + "└── ", childrenPrefix + "    ", diagram);
+            }
+        }
+    }
+
+
     // ---------------Shared--------------------
     public static <T> IPosition<T> find(ITree<T> t, IPosition<T> p, T k) {
         if (p.element().equals(k)) {
@@ -185,5 +210,15 @@ public class Q1 {
          */
         IPosition<Character> dPos = find(tree, tree.root(), 'D');
         System.out.printf("Q9: %s\n", getPath(tree, dPos, nPos));
+
+        /*
+        Q10: Based on the code you have used to explore the tree contents and structure,
+             can you draw a diagram to show the structure of the tree?
+             This solution is inspired by:
+             https://stackoverflow.com/a/8948691
+         */
+        String treeDiagram = getTreeDiagram(tree);
+        System.out.println("Q10: ");
+        System.out.println(treeDiagram);
     }
 }
