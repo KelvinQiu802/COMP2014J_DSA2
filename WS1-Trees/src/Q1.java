@@ -3,11 +3,15 @@ import dsa.iface.IPosition;
 import dsa.iface.ITree;
 import dsa.impl.Tree;
 
+import java.util.ArrayList;
+
 public class Q1 {
+    // ---------------Q1--------------------
     public static <T> T getRootValue(ITree<T> t) {
         return t.root().element();
     }
 
+    // ---------------Q2--------------------
     public static <T> String getChildrenOfRootPosition(ITree<T> t) {
         IIterator<IPosition<T>> it = t.children(t.root());
         StringBuilder result = new StringBuilder();
@@ -18,6 +22,7 @@ public class Q1 {
         return result.toString();
     }
 
+    // ---------------Q3--------------------
     public static <T> int getDepthOfValue(ITree<T> t, IPosition<T> p) {
         if (t.parent(p) == null) {
             return 0;
@@ -25,6 +30,35 @@ public class Q1 {
         return 1 + getDepthOfValue(t, t.parent(p));
     }
 
+    // ---------------Q4--------------------
+    public static <T> int getHeight(ITree<T> t, IPosition<T> p) {
+        if (t.isExternal(p)) {
+            return 0;
+        }
+        int highest = 0;
+        IIterator<IPosition<T>> it = t.children(p);
+        while (it.hasNext()) {
+            int childHeight = getHeight(t, it.next());
+            highest = Math.max(highest, childHeight);
+        }
+        return highest + 1;
+    }
+
+    // ---------------Q5--------------------
+    public static <T> ArrayList<T> getAncestorsOfPosition(ITree<T> t, IPosition<T> p) {
+        ArrayList<T> result = new ArrayList<>();
+        return getAncestorsOfPosition(t, p, result);
+    }
+
+    private static <T> ArrayList<T> getAncestorsOfPosition(ITree<T> t, IPosition<T> p, ArrayList<T> lst) {
+        if (t.parent(p) == null) {
+            return lst;
+        }
+        lst.add(t.parent(p).element());
+        return getAncestorsOfPosition(t, t.parent(p), lst);
+    }
+
+    // ---------------Shared--------------------
     public static <T> IPosition<T> find(ITree<T> t, IPosition<T> p, T k) {
         if (p.element().equals(k)) {
             return p;
@@ -37,19 +71,6 @@ public class Q1 {
             }
         }
         return null;
-    }
-
-    public static <T> int getHeight(ITree<T> t, IPosition<T> p) {
-        if (t.isExternal(p)) {
-            return 0;
-        }
-        int highest = 0;
-        IIterator<IPosition<T>> it = t.children(p);
-        while (it.hasNext()) {
-            int childHeight = getHeight(t, it.next());
-            highest = Math.max(highest, childHeight);
-        }
-        return highest + 1;
     }
 
     public static void main(String[] args) {
@@ -77,5 +98,12 @@ public class Q1 {
         Q4: What is the height of the tree?
          */
         System.out.printf("Q4: %d\n", getHeight(tree, tree.root()));
+
+        /*
+        Q5: List the elements stored in any ancestors of the position that stores G.
+         */
+        IPosition<Character> gPos = find(tree, tree.root(), 'G');
+        ArrayList<Character> gAncestors = getAncestorsOfPosition(tree, gPos);
+        System.out.printf("Q5: %s\n", gAncestors.toString());
     }
 }
