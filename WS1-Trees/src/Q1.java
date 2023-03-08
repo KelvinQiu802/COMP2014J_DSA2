@@ -97,6 +97,22 @@ public class Q1 {
         return t.parent(q) == p;
     }
 
+    // ---------------Q9--------------------
+    public static <T> ArrayList<T> getPath(ITree<T> t, IPosition<T> start, IPosition<T> end) {
+        ArrayList<T> result = new ArrayList<>();
+        addPathToLst(t, start, end, result);
+        return result;
+    }
+
+    private static <T> void addPathToLst(ITree<T> t, IPosition<T> start, IPosition<T> end, ArrayList<T> lst) {
+        if (t.parent(end) == start) {
+            lst.add(0, end.element());
+            return;
+        }
+        lst.add(0, end.element());
+        addPathToLst(t, start, t.parent(end), lst);
+    }
+
     // ---------------Shared--------------------
     public static <T> IPosition<T> find(ITree<T> t, IPosition<T> p, T k) {
         if (p.element().equals(k)) {
@@ -163,5 +179,11 @@ public class Q1 {
          */
         IPosition<Character> nPos = find(tree, tree.root(), 'N');
         System.out.printf("Q8: %s\n", isEdge(tree, nPos, lPos));
+
+        /*
+        Q9: List the elements stored in the positions that are in the path from D to N.
+         */
+        IPosition<Character> dPos = find(tree, tree.root(), 'D');
+        System.out.printf("Q9: %s\n", getPath(tree, dPos, nPos));
     }
 }
