@@ -4,6 +4,7 @@ import dsa.iface.ITree;
 import dsa.impl.Tree;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Q1 {
     // ---------------Q1--------------------
@@ -137,7 +138,6 @@ public class Q1 {
         }
     }
 
-
     // ---------------Shared--------------------
     public static <T> IPosition<T> find(ITree<T> t, IPosition<T> p, T k) {
         if (p.element().equals(k)) {
@@ -183,20 +183,20 @@ public class Q1 {
         Q5: List the elements stored in any ancestors of the position that stores G.
          */
         IPosition<Character> gPos = find(tree, tree.root(), 'G');
-        ArrayList<Character> gAncestors = getAncestorsOfPosition(tree, gPos);
+        List<Character> gAncestors = getAncestorsOfPosition(tree, gPos);
         System.out.printf("Q5: %s\n", gAncestors);
 
         /*
         Q6: List the elements stored in any descendants of the position that stores B.
          */
         IPosition<Character> bPos = find(tree, tree.root(), 'B');
-        ArrayList<Character> bDescendants = getDescendantsOfPosition(tree, bPos);
+        List<Character> bDescendants = getDescendantsOfPosition(tree, bPos);
         System.out.printf("Q6: %s\n", bDescendants);
 
         /*
         Q7: List the elements that are stored at leaf (external) positions.
          */
-        ArrayList<Character> allLeaves = getAllLeaves(tree);
+        List<Character> allLeaves = getAllLeaves(tree);
         System.out.printf("Q7: %s\n", allLeaves);
 
         /*
