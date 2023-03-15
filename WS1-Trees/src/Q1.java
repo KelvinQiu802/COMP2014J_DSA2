@@ -221,7 +221,8 @@ public class Q1 {
         Q9: List the elements stored in the positions that are in the path from D to N.
          */
         IPosition<Character> dPos = find(tree, tree.root(), 'D');
-        System.out.printf("Q9: %s\n", getPath(tree, dPos, nPos));
+        IList<Character> path = getPath(tree, dPos, nPos);
+        System.out.printf("Q9: %s\n", listToString(path));
 
         /*
         Q10: Based on the code you have used to explore the tree contents and structure,
