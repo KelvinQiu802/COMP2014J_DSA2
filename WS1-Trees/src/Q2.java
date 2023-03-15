@@ -2,29 +2,30 @@ import dsa.iface.IIterator;
 import dsa.iface.IPosition;
 import dsa.iface.ITree;
 import dsa.impl.Tree;
+import dsa.impl.SLinkedList;
+import dsa.iface.IList;
 
-import java.util.ArrayList;
 
 public class Q2 {
     // ---------------------Q3----------------------
-    public static <T> ArrayList<T> getChildrenOfPos(ITree<T> t, IPosition<T> p) {
-        ArrayList<T> result = new ArrayList<>();
+    public static <T> IList<T> getChildrenOfPos(ITree<T> t, IPosition<T> p) {
+        IList<T> result = new SLinkedList<>();
         IIterator<IPosition<T>> it = t.children(p);
         while (it.hasNext()) {
-            result.add(it.next().element());
+            result.insertLast(it.next().element());
         }
         return result;
     }
 
     // ---------------------Q4----------------------
-    public static <T> ArrayList<T> getSiblingsOfPos(ITree<T> t, IPosition<T> p) {
-        ArrayList<T> result = new ArrayList<>();
+    public static <T> IList<T> getSiblingsOfPos(ITree<T> t, IPosition<T> p) {
+        IList<T> result = new SLinkedList<>();
         IPosition<T> parent = t.parent(p);
         IIterator<IPosition<T>> it = t.children(parent);
         while (it.hasNext()) {
             IPosition<T> next = it.next();
             if (!next.element().equals(p.element())) {
-                result.add(next.element());
+                result.insertLast(next.element());
             }
         }
         return result;
@@ -61,17 +62,20 @@ public class Q2 {
         Q3: List the elements stored in the children of the position that stores B.
          */
         IPosition<Character> bPos = Q1.find(tree, tree.root(), 'B');
-        System.out.println("Q3: " + getChildrenOfPos(tree, bPos));
+        IList<Character> childrenOfB = getChildrenOfPos(tree, bPos);
+        System.out.println("Q3: " + Q1.listToString(childrenOfB));
 
         /*
         Q4: List the elements stored in any siblings of the position that stores D.
          */
-        System.out.println("Q4: " + getSiblingsOfPos(tree, dPos));
+        IList<Character> siblingsOfD = getSiblingsOfPos(tree, dPos);
+        System.out.println("Q4: " + Q1.listToString(siblingsOfD));
 
         /*
         Q5: List the elements that are stored at external positions.
          */
-        System.out.println("Q5: " + Q1.getAllLeaves(tree));
+        IList<Character> allLeaves = Q1.getAllLeaves(tree);
+        System.out.println("Q5: " + Q1.listToString(allLeaves));
 
         /*
         Q6: What is the parent of the position that stores A?
@@ -83,7 +87,8 @@ public class Q2 {
         Q7: List the ancestors of the position that stores E.
          */
         IPosition<Character> ePos = Q1.find(tree, tree.root(), 'E');
-        System.out.println("Q7: " + Q1.getAncestorsOfPosition(tree, ePos));
+        IList<Character> ancestorsOfE = Q1.getAncestorsOfPosition(tree, ePos);
+        System.out.println("Q7: " + Q1.listToString(ancestorsOfE));
 
         /*
         Q8: What is the size of the tree?

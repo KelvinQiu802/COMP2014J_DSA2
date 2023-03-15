@@ -2,20 +2,21 @@ import dsa.iface.IIterator;
 import dsa.iface.IPosition;
 import dsa.iface.ITree;
 import dsa.impl.Tree;
+import dsa.impl.SLinkedList;
+import dsa.iface.IList;
 
-import java.util.ArrayList;
 
 public class Q3 {
     // --------------------Q1---------------------
-    public static <T> ArrayList<T> getInternalValues(ITree<T> t) {
-        ArrayList<T> result = new ArrayList<>();
+    public static <T> IList<T> getInternalValues(ITree<T> t) {
+        IList<T> result = new SLinkedList<>();
         getInternalValues(t, t.root(), result);
         return result;
     }
 
-    private static <T> void getInternalValues(ITree<T> t, IPosition<T> p, ArrayList<T> lst) {
+    private static <T> void getInternalValues(ITree<T> t, IPosition<T> p, IList<T> lst) {
         if (t.isInternal(p)) {
-            lst.add(p.element());
+            lst.insertLast(p.element());
         }
         IIterator<IPosition<T>> it = t.children(p);
         while (it.hasNext()) {
@@ -34,7 +35,8 @@ public class Q3 {
         /*
         Q2: What are stored in the internal positions?
          */
-        System.out.println("Q2: " + getInternalValues(tree));
+        IList<String> internalValues = getInternalValues(tree);
+        System.out.println("Q2: " + Q1.listToString(internalValues));
 
         /*
         Q3: How many descendants does the position that stores “cs016/” have?
@@ -51,13 +53,15 @@ public class Q3 {
         Q5: What are the siblings of the position that stores “homeworks/”?
          */
         IPosition<String> bPos = Q1.find(tree, tree.root(), "homeworks/");
-        System.out.println("Q5: " + Q2.getSiblingsOfPos(tree, bPos));
+        IList<String> siblings = Q2.getSiblingsOfPos(tree, bPos);
+        System.out.println("Q5: " + Q1.listToString(siblings));
 
         /*
         Q6: Which positions are in the subtree rooted at the position that stores “projects/”?
          */
         IPosition<String> cPos = Q1.find(tree, tree.root(), "projects/");
-        System.out.println("Q6: " + Q1.getDescendantsOfPosition(tree, cPos));
+        IList<String> descendants = Q1.getDescendantsOfPosition(tree, cPos);
+        System.out.println("Q6: " + Q1.listToString(descendants));
 
         /*
         Q7: What is the depth of position that stores “papers/”?

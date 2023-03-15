@@ -2,9 +2,9 @@ import dsa.iface.IIterator;
 import dsa.iface.IPosition;
 import dsa.iface.ITree;
 import dsa.impl.Tree;
+import dsa.impl.SLinkedList;
+import dsa.iface.IList;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Q1 {
     // ---------------Q1--------------------
@@ -46,45 +46,45 @@ public class Q1 {
     }
 
     // ---------------Q5--------------------
-    public static <T> ArrayList<T> getAncestorsOfPosition(ITree<T> t, IPosition<T> p) {
-        ArrayList<T> result = new ArrayList<>();
+    public static <T> IList<T> getAncestorsOfPosition(ITree<T> t, IPosition<T> p) {
+        IList<T> result = new SLinkedList<>();
         return getAncestorsOfPosition(t, p, result);
     }
 
-    private static <T> ArrayList<T> getAncestorsOfPosition(ITree<T> t, IPosition<T> p, ArrayList<T> lst) {
+    private static <T> IList<T> getAncestorsOfPosition(ITree<T> t, IPosition<T> p, IList<T> lst) {
         if (t.parent(p) == null) {
             return lst;
         }
-        lst.add(t.parent(p).element());
+        lst.insertLast(t.parent(p).element());
         return getAncestorsOfPosition(t, t.parent(p), lst);
     }
 
     // ---------------Q6--------------------
-    public static <T> ArrayList<T> getDescendantsOfPosition(ITree<T> t, IPosition<T> p) {
-        ArrayList<T> result = new ArrayList<>();
+    public static <T> IList<T> getDescendantsOfPosition(ITree<T> t, IPosition<T> p) {
+        IList<T> result = new SLinkedList<>();
         getDescendants(t, p, result);
         return result;
     }
 
-    private static <T> void getDescendants(ITree<T> t, IPosition<T> p, ArrayList<T> lst) {
+    private static <T> void getDescendants(ITree<T> t, IPosition<T> p, IList<T> lst) {
         IIterator<IPosition<T>> it = t.children(p);
         while (it.hasNext()) {
             IPosition<T> nextPos = it.next();
-            lst.add(nextPos.element());
+            lst.insertLast(nextPos.element());
             getDescendants(t, nextPos, lst);
         }
     }
 
     // ---------------Q7--------------------
-    public static <T> ArrayList<T> getAllLeaves(ITree<T> t) {
-        ArrayList<T> result = new ArrayList<>();
+    public static <T> IList<T> getAllLeaves(ITree<T> t) {
+        IList<T> result = new SLinkedList<>();
         addAllLeavesToLst(t, t.root(), result);
         return result;
     }
 
-    private static <T> void addAllLeavesToLst(ITree<T> t, IPosition<T> p, ArrayList<T> lst) {
+    private static <T> void addAllLeavesToLst(ITree<T> t, IPosition<T> p, IList<T> lst) {
         if (t.isExternal(p)) {
-            lst.add(p.element());
+            lst.insertLast(p.element());
         }
         IIterator<IPosition<T>> it = t.children(p);
         while (it.hasNext()) {
@@ -99,18 +99,18 @@ public class Q1 {
     }
 
     // ---------------Q9--------------------
-    public static <T> ArrayList<T> getPath(ITree<T> t, IPosition<T> start, IPosition<T> end) {
-        ArrayList<T> result = new ArrayList<>();
+    public static <T> IList<T> getPath(ITree<T> t, IPosition<T> start, IPosition<T> end) {
+        IList<T> result = new SLinkedList<>();
         addPathToLst(t, start, end, result);
         return result;
     }
 
-    private static <T> void addPathToLst(ITree<T> t, IPosition<T> start, IPosition<T> end, ArrayList<T> lst) {
+    private static <T> void addPathToLst(ITree<T> t, IPosition<T> start, IPosition<T> end, IList<T> lst) {
         if (t.parent(end) == start) {
-            lst.add(0, end.element());
+            lst.insertFirst(end.element());
             return;
         }
-        lst.add(0, end.element());
+        lst.insertFirst(end.element());
         addPathToLst(t, start, t.parent(end), lst);
     }
 
@@ -153,6 +153,18 @@ public class Q1 {
         return null;
     }
 
+    public static <T> String listToString(IList<T> lst) {
+        StringBuilder s = new StringBuilder();
+        IIterator<T> it = lst.iterator();
+        s.append("[");
+        while (it.hasNext()) {
+            s.append(it.next());
+            s.append(", ");
+        }
+        s.append("]");
+        return s.toString();
+    }
+
     public static void main(String[] args) {
         ITree<Character> tree = Tree.createTreeA();
 
@@ -183,21 +195,21 @@ public class Q1 {
         Q5: List the elements stored in any ancestors of the position that stores G.
          */
         IPosition<Character> gPos = find(tree, tree.root(), 'G');
-        List<Character> gAncestors = getAncestorsOfPosition(tree, gPos);
-        System.out.printf("Q5: %s\n", gAncestors);
+        IList<Character> gAncestors = getAncestorsOfPosition(tree, gPos);
+        System.out.printf("Q5: %s\n", listToString(gAncestors));
 
         /*
         Q6: List the elements stored in any descendants of the position that stores B.
          */
         IPosition<Character> bPos = find(tree, tree.root(), 'B');
-        List<Character> bDescendants = getDescendantsOfPosition(tree, bPos);
-        System.out.printf("Q6: %s\n", bDescendants);
+        IList<Character> bDescendants = getDescendantsOfPosition(tree, bPos);
+        System.out.printf("Q6: %s\n", listToString(bDescendants));
 
         /*
         Q7: List the elements that are stored at leaf (external) positions.
          */
-        List<Character> allLeaves = getAllLeaves(tree);
-        System.out.printf("Q7: %s\n", allLeaves);
+        IList<Character> allLeaves = getAllLeaves(tree);
+        System.out.printf("Q7: %s\n", listToString(allLeaves));
 
         /*
         Q8: Is (N,L) an edge? Same as: Is N is the parent of L?
